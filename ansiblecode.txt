@@ -1,0 +1,41 @@
+Playbook of ansible for installing server: web.yml
+
+-name: Web Deployment vm1
+ hosts: target1
+ tasks:
+ - package: "name=http state=present"
+ - copy: "src=index.html dest=/var/www/html"
+ - service: "name=http state=started"
+-name: Web Deployment vm2
+ hosts: target2
+ tasks:
+ - package: "name=http state=present"
+ - copy: "src=index2.html dest=/var/www/html"
+ - service: "name=http state=started"
+
+
+Inventory file use:inventory.txt
+target1 ansible_host=10.0.0.36 ansible_ssh_pass=osboxes.org vm1=target1
+target2 ansible_host=10.0.0.190 ansible_ssh_pass=osboxes.org vm1=target2
+
+
+The HTML files used for target1:index.html
+<html>
+<body><p>welcome to sjsu 10.0.0.36
+</body>
+</html>
+
+The HTML files used for target2:index2.html
+<html>
+<body><p>welcome to sjsu 10.0.0.190
+</body>
+</html>
+
+
+Playbook of ansible for unstalling server: web.yml
+-name: Web Deployment vm1
+ hosts: all
+ tasks:
+ - package: "name=http state=present"
+ - copy: "src=index.html dest=/var/www/html"
+ - service: "name=http state=stopped"
